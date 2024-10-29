@@ -4,6 +4,12 @@ spring:
     url: jdbc:postgresql://localhost:5432/cityadministration
     username: root
     password: "123"
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   session:
     store-type: jdbc
     jdbc:
