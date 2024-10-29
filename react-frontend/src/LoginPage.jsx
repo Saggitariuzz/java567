@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -11,6 +11,8 @@ function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [timeerror, setTimeerror] = useState('');
+    const [time, setTime] = useState('');
     const history = useNavigate();
 
     const handleLogin = async () => {
@@ -19,7 +21,6 @@ function LoginPage() {
                 setError('Please enter both username and password.');
                 return;
             }
-
             const response = await axios.post('http://localhost:8081/auth/signin', { username, password });
             console.log('Login successful:', response.data);
             history('/dashboard');
@@ -28,6 +29,25 @@ function LoginPage() {
             setError('Invalid username or password.');
         }
     };
+
+    const handleTime = async() => {
+        try{
+            const response = await axios.get("http://localhost:8080/time");
+            setTime(response.data);
+        }catch(err){
+            setTimeerror("Не удалось отобразить время");
+        }
+
+    }
+
+    useEffect(() =>{
+        handleTime();
+        const interval = setInterval(()=>{
+            handleTime();
+        }, 10000);
+        return () => clearInterval(interval);
+    }, []);
+
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
@@ -41,6 +61,11 @@ function LoginPage() {
                     <div className="text-center">
                         <p>Not a member? <a href="/signup" >Register</a></p>
                     </div>
+                    {timeerror ? (
+                        <p className="text-center">{timeerror}</p>
+                    ):(
+                        <p className='text-center'>{time}</p>
+                    )}
                 </MDBContainer>
             </div>
         </div>
