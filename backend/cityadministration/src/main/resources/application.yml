@@ -4,3 +4,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/cityadministration
     username: root
     password: "123"
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
