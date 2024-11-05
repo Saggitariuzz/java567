@@ -19,7 +19,7 @@ public class UserResponseDTO {
 
     private String email;
 
-    //private String avatar;
+    private String avatar;
 
     private String role;
 }

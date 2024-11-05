@@ -11,7 +11,7 @@ public class UserMapper {
                 userResponseDTO.getUsername(),
                 userResponseDTO.getPassword(),
                 userResponseDTO.getEmail(),
-                //userResponseDTO.getAvatar(),
+                userResponseDTO.getAvatar(),
                 userResponseDTO.getRole()
         );
     }
@@ -22,7 +22,7 @@ public class UserMapper {
                 user.getUsername(),
                 user.getPassword(),
                 user.getEmail(),
-                //user.getAvatar(),
+                user.getAvatar(),
                 user.getRole()
         );
     }

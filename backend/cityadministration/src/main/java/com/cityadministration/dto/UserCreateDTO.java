@@ -18,5 +18,5 @@ public class UserCreateDTO {
 
     private String email;
 
-    //private MultipartFile avatar;
+    private MultipartFile avatar;
 }
