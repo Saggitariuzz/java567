@@ -37,7 +37,6 @@ function LoginPage() {
         }catch(err){
             setTimeerror("Не удалось отобразить время");
         }
-
     }
 
     useEffect(() =>{

@@ -8,7 +8,7 @@ import {
 } from 'mdb-react-ui-kit';
 
 function SignupPage() {
-    const [fullName, setFullName] = useState('');
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -20,7 +20,7 @@ function SignupPage() {
     const handleSignup = async () => {
         try {
             // Check for empty fields
-            if (!fullName || !email || !password || !confirmPassword || !mobile) {
+            if (!username || !email || !password || !confirmPassword /*|| !mobile*/) {
                 setError('Please fill in all fields.');
                 return;
             }
@@ -29,12 +29,12 @@ function SignupPage() {
                 throw new Error("Passwords do not match");
             }
 
-            const response = await axios.post('http://localhost:8081/auth/signup', {
-                fullName,
-                email,
-                password,
-                role,
-                mobile
+            const response = await axios.post('http://localhost:8080/register', {
+                username: username,
+                password: password,
+                email: email
+                //role,
+                //mobile
             });
             // Handle successful signup
             console.log(response.data);
@@ -53,8 +53,8 @@ function SignupPage() {
                     <h2 className="mb-4 text-center">Sign Up Page</h2>
                     {/* Render error message if exists */}
                     {error && <p className="text-danger">{error}</p>}
-                    <MDBInput wrapperClass='mb-3' id='fullName' placeholder={"Full Name"} value={fullName} type='text'
-                              onChange={(e) => setFullName(e.target.value)}/>
+                    <MDBInput wrapperClass='mb-3' id='fullName' placeholder={"Full Name"} value={username} type='text'
+                              onChange={(e) => setUsername(e.target.value)}/>
                     <MDBInput wrapperClass='mb-3' placeholder='Email Address' id='email' value={email} type='email'
                               onChange={(e) => setEmail(e.target.value)}/>
                     <MDBInput wrapperClass='mb-3' placeholder='Password' id='password' type='password' value={password}
@@ -64,9 +64,7 @@ function SignupPage() {
                               onChange={(e) => setConfirmPassword(e.target.value)}/>
 
 
-                    <MDBInput wrapperClass='mb-2' placeholder='Mobile Number' id='mobileNumber' value={mobile}
-                              type='text'
-                              onChange={(e) => setMobileNumber(e.target.value)}/>
+
                     <label className="form-label mb-1">Role:</label>
                     <select className="form-select mb-4" value={role} onChange={(e) => setRole(e.target.value)}>
                         <option value="ROLE_CUSTOMER">User</option>
