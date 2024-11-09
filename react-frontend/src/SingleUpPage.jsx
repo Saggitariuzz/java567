@@ -50,13 +50,13 @@ function SignupPage() {
         <div className="d-flex justify-content-center align-items-center vh-100">
             <div className="border rounded-lg p-4" style={{width: '600px', height: 'auto'}}>
                 <MDBContainer className="p-3">
-                    <h2 className="mb-4 text-center">Sign Up Page</h2>
+                    <h2 className="mb-4 text-center">Регистрация</h2>
                     {/* Render error message if exists */}
                     {error && <p className="text-danger">{error}</p>}
                     <MDBInput wrapperClass='mb-3' id='fullName' placeholder={"Full Name"} value={username} type='text'
                               onChange={(e) => setUsername(e.target.value)}/>
                     <MDBInput wrapperClass='mb-3' placeholder='Email Address' id='email' value={email} type='email'
-                              onChange={(e) => setEmail(e.target.value)}/>
+                              onChange={(e) => setEmail(e.target.value)}/>  
                     <MDBInput wrapperClass='mb-3' placeholder='Password' id='password' type='password' value={password}
                               onChange={(e) => setPassword(e.target.value)}/>
                     <MDBInput wrapperClass='mb-3' placeholder='Confirm Password' id='confirmPassword' type='password'
@@ -65,11 +65,11 @@ function SignupPage() {
 
 
 
-                    <label className="form-label mb-1">Role:</label>
+                    {/* <label className="form-label mb-1">Role:</label>
                     <select className="form-select mb-4" value={role} onChange={(e) => setRole(e.target.value)}>
                         <option value="ROLE_CUSTOMER">User</option>
                         <option value="ROLE_ADMIN">Admin</option>
-                    </select>
+                    </select> */}
                     <button className="mb-4 d-block mx-auto fixed-action-btn btn-primary"
                             style={{height: '40px', width: '100%'}}
                             onClick={handleSignup}>Sign Up

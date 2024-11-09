@@ -6,8 +6,6 @@ function WelcomeDashboard({ username }) {
     const history = useNavigate();
 
     const handleLogout = () => {
-        // Perform logout actions here (e.g., clear session, remove authentication token)
-        // After logout, redirect to the login page
         history('/');
     };
 
