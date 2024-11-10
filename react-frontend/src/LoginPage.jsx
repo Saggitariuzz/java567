@@ -8,8 +8,7 @@ function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [timeerror, setTimeerror] = useState('');
-    const [time, setTime] = useState('');
+
     const navigate = useNavigate();
 
     const handleLogin = async () => {
@@ -27,31 +26,14 @@ function LoginPage() {
         }
     };
 
-    const handleTime = async () => {
-        try {
-            const response = await axios.get("http://localhost:8080/time");
-            setTime(response.data);
-        } catch (err) {
-            setTimeerror("Не удалось отобразить время");
-        }
-    };
-
-    useEffect(() => {
-        handleTime();
-        const interval = setInterval(() => {
-            handleTime();
-        }, 10000);
-        return () => clearInterval(interval);
-    }, []);
-
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
             <div className="border rounded-lg p-4" style={{ width: '500px', height: 'auto' }}>
                 <MDBContainer className="p-3">
-                    <h2 className="mb-4 text-center">Login Page</h2>
+                    <h2 className="mb-4 text-center">Вход</h2>
                     <MDBInput
                         wrapperClass='mb-4'
-                        placeholder='Email address'
+                        placeholder='Электронная почта'
                         id='email'
                         value={username}
                         type='email'
@@ -59,7 +41,7 @@ function LoginPage() {
                     />
                     <MDBInput
                         wrapperClass='mb-4'
-                        placeholder='Password'
+                        placeholder='Пароль'
                         id='password'
                         type='password'
                         value={password}
@@ -71,16 +53,12 @@ function LoginPage() {
                         style={{ height: '50px', width: '100%' }}
                         onClick={handleLogin}
                     >
-                        Sign in
+                        Войти
                     </button>
                     <div className="text-center">
-                        <p>Not a member? <a href="/signup">Register</a></p>
+                        <p>Еще не зарегистрированы ? <a href="/signup">Регистрация</a></p>
                     </div>
-                    {timeerror ? (
-                        <p className="text-center">{timeerror}</p>
-                    ) : (
-                        <p className='text-center'>{time}</p>
-                    )}
+
                 </MDBContainer>
             </div>
         </div>
