@@ -46,7 +46,8 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url('https://example.com/your-image.jpg'); /* Установите фоновое изображение города */
+  background-image: url('../images/giz6rvfti4ezv_1ju3vw4.jpeg');
+  opacity: 75%; /* Установите фоновое изображение города */
   background-size: cover;
   background-position: center;
   color: #ffffff;
@@ -55,6 +56,7 @@ body, html {
 
 .city-page h1 {
   font-size: 4rem;
+
   margin-bottom: 20px;
 }
 

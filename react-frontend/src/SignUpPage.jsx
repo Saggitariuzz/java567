@@ -72,7 +72,7 @@ function SignupPage() {
                     </button>
 
                     <div className="text-center">
-                        <p>Already Register? <a href="/">Login</a></p>
+                        <p>Already Register? <a href="/login">Login</a></p>
                     </div>
 
                 </MDBContainer>

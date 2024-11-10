@@ -12,7 +12,7 @@ function App() {
         <div className="header d-flex justify-content-between p-3">
           <Link to="/" className="btn btn-secondary">Арзамас</Link>
           <div>
-            <Link to="/" className="btn btn-primary mx-2">Вход</Link>
+            <Link to="/login" className="btn btn-primary mx-2">Вход</Link>
             <Link to="/signup" className="btn btn-primary">Регистрация</Link>
           </div>
         </div>
