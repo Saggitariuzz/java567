@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useHistory hook
+import { useNavigate } from 'react-router-dom';
 import {
     MDBContainer,
     MDBInput,
@@ -14,13 +14,13 @@ function SignupPage() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [role, setRole] = useState('ROLE_CUSTOMER');
     const [mobile, setMobileNumber] = useState('');
-    const [error, setError] = useState(''); // State to manage error messages
-    const history = useNavigate(); // Get the history object for redirection
+    const [error, setError] = useState('');
+    const [photo, setPhoto] = useState(null); // State for the uploaded photo
+    const history = useNavigate();
 
     const handleSignup = async () => {
         try {
-            // Check for empty fields
-            if (!username || !email || !password || !confirmPassword /*|| !mobile*/) {
+            if (!username || !email || !password || !confirmPassword || !photo) {
                 setError('Please fill in all fields.');
                 return;
             }
@@ -29,18 +29,21 @@ function SignupPage() {
                 throw new Error("Passwords do not match");
             }
 
-            const response = await axios.post('http://localhost:8080/register', {
-                username: username,
-                password: password,
-                email: email
-                //role,
-                //mobile
+            const formData = new FormData();
+            formData.append('username', username);
+            formData.append('password', password);
+            formData.append('email', email);
+            formData.append('photo', photo); // Append the photo to the form data
+
+            const response = await axios.post('http://localhost:8080/register', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
-            // Handle successful signup
+
             console.log(response.data);
             history('/dashboard');
         } catch (error) {
-            // Handle signup error
             console.error('Signup failed:', error.response ? error.response.data : error.message);
             setError(error.response ? error.response.data : error.message);
         }
@@ -48,30 +51,23 @@ function SignupPage() {
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
-            <div className="border rounded-lg p-4" style={{width: '600px', height: 'auto'}}>
+            <div className="border rounded-lg p-4" style={{ width: '600px', height: 'auto' }}>
                 <MDBContainer className="p-3">
                     <h2 className="mb-4 text-center">Регистрация</h2>
-                    {/* Render error message if exists */}
                     {error && <p className="text-danger">{error}</p>}
                     <MDBInput wrapperClass='mb-3' id='fullName' placeholder={"Full Name"} value={username} type='text'
-                              onChange={(e) => setUsername(e.target.value)}/>
+                              onChange={(e) => setUsername(e.target.value)} />
                     <MDBInput wrapperClass='mb-3' placeholder='Email Address' id='email' value={email} type='email'
-                              onChange={(e) => setEmail(e.target.value)}/>  
+                              onChange={(e) => setEmail(e.target.value)} />
                     <MDBInput wrapperClass='mb-3' placeholder='Password' id='password' type='password' value={password}
-                              onChange={(e) => setPassword(e.target.value)}/>
+                              onChange={(e) => setPassword(e.target.value)} />
                     <MDBInput wrapperClass='mb-3' placeholder='Confirm Password' id='confirmPassword' type='password'
                               value={confirmPassword}
-                              onChange={(e) => setConfirmPassword(e.target.value)}/>
-
-
-
-                    {/* <label className="form-label mb-1">Role:</label>
-                    <select className="form-select mb-4" value={role} onChange={(e) => setRole(e.target.value)}>
-                        <option value="ROLE_CUSTOMER">User</option>
-                        <option value="ROLE_ADMIN">Admin</option>
-                    </select> */}
+                              onChange={(e) => setConfirmPassword(e.target.value)} />
+                    <MDBInput wrapperClass='mb-3' type='file' id='photo' onChange={(e) => setPhoto(e.target.files[0])} />
+                    
                     <button className="mb-4 d-block mx-auto fixed-action-btn btn-primary"
-                            style={{height: '40px', width: '100%'}}
+                            style={{ height: '40px', width: '100%' }}
                             onClick={handleSignup}>Sign Up
                     </button>
 
@@ -80,6 +76,7 @@ function SignupPage() {
                     </div>
 
                 </MDBContainer>
+                
             </div>
         </div>
     );
