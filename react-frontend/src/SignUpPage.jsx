@@ -15,12 +15,12 @@ function SignupPage() {
     const [role, setRole] = useState('ROLE_CUSTOMER');
     const [mobile, setMobileNumber] = useState('');
     const [error, setError] = useState('');
-    const [photo, setPhoto] = useState(null); // State for the uploaded photo
+    const [avatar, setPhoto] = useState(null); // State for the uploaded photo
     const history = useNavigate();
 
     const handleSignup = async () => {
         try {
-            if (!username || !email || !password || !confirmPassword || !photo) {
+            if (!username || !email || !password || !confirmPassword || !avatar) {
                 setError('Please fill in all fields.');
                 return;
             }
@@ -33,7 +33,7 @@ function SignupPage() {
             formData.append('username', username);
             formData.append('password', password);
             formData.append('email', email);
-            formData.append('photo', photo); // Append the photo to the form data
+            formData.append('avatar', avatar); // Append the photo to the form data
 
             const response = await axios.post('http://localhost:8080/register', formData, {
                 headers: {
@@ -64,7 +64,7 @@ function SignupPage() {
                     <MDBInput wrapperClass='mb-3' placeholder='Confirm Password' id='confirmPassword' type='password'
                               value={confirmPassword}
                               onChange={(e) => setConfirmPassword(e.target.value)} />
-                    <MDBInput wrapperClass='mb-3' type='file' id='photo' onChange={(e) => setPhoto(e.target.files[0])} />
+                    <MDBInput wrapperClass='mb-3' type='file' id='avatar' onChange={(e) => setPhoto(e.target.files[0])} />
                     
                     <button className="mb-4 d-block mx-auto fixed-action-btn btn-primary"
                             style={{ height: '40px', width: '100%' }}
