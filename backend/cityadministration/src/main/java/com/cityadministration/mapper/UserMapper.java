@@ -2,10 +2,15 @@ package com.cityadministration.mapper;
 
 import com.cityadministration.dto.UserResponseDTO;
 import com.cityadministration.entity.User;
+import com.cityadministration.exception.FileUploadException;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class UserMapper {
 
-    public static User userResponseDtoToUser(UserResponseDTO userResponseDTO){
+    public static User userResponseDtoToUser(User userResponseDTO){
         return new User(
                 userResponseDTO.getId(),
                 userResponseDTO.getUsername(),
@@ -17,13 +22,17 @@ public class UserMapper {
     }
 
     public static UserResponseDTO userToUserResponseDto (User user){
-        return new UserResponseDTO(
-                user.getId(),
-                user.getUsername(),
-                user.getPassword(),
-                user.getEmail(),
-                user.getAvatar(),
-                user.getRole()
-        );
+        try{
+            byte[] avatar = Files.readAllBytes(Paths.get(user.getAvatar()));
+            return new UserResponseDTO(
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    avatar,
+                    user.getRole()
+            );
+        }catch (IOException ex){
+            throw new FileUploadException("Не удалось загрузить файл");
+        }
     }
 }

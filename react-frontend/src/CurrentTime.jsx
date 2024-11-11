@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 function CurrentTime() {
-    const [time, setTime] = useState('');
+    const [time, setTime] = useState(null);
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -23,7 +23,7 @@ function CurrentTime() {
         return () => clearInterval(interval); // Очистка интервала при размонтировании
     }, []);
 
-    return <div>{time}</div>;
+    return <div>{error?error:time}</div>;
 }
 
 export default CurrentTime;

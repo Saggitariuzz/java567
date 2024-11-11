@@ -14,7 +14,7 @@ function LoginPage() {
     const handleLogin = async () => {
         try {
             if (!username || !password) {
-                setError('Please enter both username and password.');
+                setError('Пожалуйста, введите логин и пароль.');
                 return;
             }
             const response = await axios.post('http://localhost:8080/login', { username, password });
@@ -22,7 +22,7 @@ function LoginPage() {
             navigate('/dashboard');  // Здесь используем navigate вместо history
         } catch (error) {
             console.error('Login failed:', error.response ? error.response.data : error.message);
-            setError('Invalid username or password.');
+            setError('Invalid username or password.');  
         }
     };
 

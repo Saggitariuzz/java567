@@ -2,11 +2,17 @@ package com.cityadministration.service;
 
 import com.cityadministration.dto.UserCreateDTO;
 import com.cityadministration.dto.UserLoginDTO;
-import com.cityadministration.dto.UserResponseDTO;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.ResponseEntity;
 
 public interface UserService {
 
-    UserResponseDTO registerUser(UserCreateDTO userCreateDTO);
+    ResponseEntity<?> registerUser(UserCreateDTO userCreateDTO);
 
-    UserResponseDTO loginUser(UserLoginDTO userLoginDTO);
+    ResponseEntity<?> loginUser(UserLoginDTO userLoginDTO, HttpSession session);
+
+    ResponseEntity<?> checkUserLogin(HttpSession session);
+
+    ResponseEntity<?> getDashBoard(HttpSession session);
 }
+
