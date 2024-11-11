@@ -3,8 +3,9 @@ import React, { useEffect, useState } from 'react';
 
 function CurrentTime() {
     const [time, setTime] = useState(null);
-    const [visitorCount, setVisitorCount] = useState(null); // Состояние для количества посетителей
+    const [visitorCount, setVisitorCount] = useState(0);  // Начальное значение - 0
     const [error, setError] = useState('');
+    const [visitorError, setVisitorError] = useState('');
 
     useEffect(() => {
         // Функция для обновления времени
@@ -17,44 +18,37 @@ function CurrentTime() {
             }
         };
 
-        // Функция для обновления количества посетителей
-        const updateVisitorCount = async () => {
-            try {
-                const response = await axios.get("http://localhost:8080/getvisitorcount");
-                setVisitorCount(response.data);
-            } catch (error) {
-                console.error("Ошибка при загрузке количества посетителей");
-            }
-        };
 
         // Функция для регистрации нового посетителя
         const registerVisitor = async () => {
             try {
-                await axios.get("http://localhost:8080/incrementvisitor");
-                updateVisitorCount(); // Обновляем количество посетителей сразу после регистрации нового посетителя
+                const response = await axios.get("http://localhost:8080/incrementvisitor");
+                setVisitorCount(response.data);
             } catch (error) {
                 console.error("Ошибка при регистрации посетителя");
+                setVisitorError("Ошибка при регистрации посетителя");
             }
         };
 
         // Вызов функций при монтировании компонента
+        registerVisitor(); // Register visitor only once
         updateCurrentTime();
-        registerVisitor(); // Регистрация нового посетителя
 
-        // Установка интервала для обновления времени и количества посетителей
+        // Установка интервала для обновления времени
         const interval = setInterval(() => {
             updateCurrentTime();
-            updateVisitorCount();
-        }, 1000); // Обновляем каждую секунду
+        }, 10000000); // Обновляем каждую секунду
 
         return () => clearInterval(interval); // Очистка интервала при размонтировании
     }, []);
 
     return (
         <div>
-            {error ? error : time}
+            {error && <div>{error}</div>}
+            <div>{time}</div>
             <br />
-            {visitorCount !== null ? `Количество посетителей: ${visitorCount}` : "Загрузка количества посетителей..."}
+            {visitorError && <div>{visitorError}</div>}
+            <div>{`Количество посетителей: ${visitorCount}`}</div>
         </div>
     );
 }

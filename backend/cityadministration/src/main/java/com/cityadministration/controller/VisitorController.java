@@ -16,12 +16,7 @@ public class VisitorController {
     private final VisitorService visitorService;
 
     @GetMapping("/incrementvisitor")
-    public void incrementVisitorCount(HttpSession session){
-        visitorService.incrementVisitorCount(session);
-    }
-
-    @GetMapping("/getvisitorcount")
-    public ResponseEntity<?> getVisitorCount(){
-        return visitorService.getVisitorsCount();
+    public ResponseEntity<?> incrementVisitorCount(HttpSession session){
+        return visitorService.incrementVisitorCount(session);
     }
 }

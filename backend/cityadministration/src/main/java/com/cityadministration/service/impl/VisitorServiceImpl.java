@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -18,28 +19,22 @@ public class VisitorServiceImpl implements VisitorService {
     private VisitorRepository visitorRepository;
 
     @Override
-    public void incrementVisitorCount(HttpSession session){
-        if(session.getAttribute("visited") == null){
+    @Transactional
+    public ResponseEntity<?> incrementVisitorCount(HttpSession session){
+        String visitedStatus = (String) session.getAttribute("visited");
+        System.out.println("Visited status: " + visitedStatus);
+        if(visitedStatus == null){
             Optional<Visitor> visitorOptional = visitorRepository.findById(1L);
             if(visitorOptional.isPresent()){
                 Visitor visitor = visitorOptional.get();
-                Long count = visitor.getCount();
-                visitor.setCount(count+1);
+                Long count = visitor.getCount() + 1;
+                visitor.setCount(count);
                 visitorRepository.save(visitor);
+                session.setAttribute("visited", "true");
+                return ResponseEntity.ok(count);
             }
         }
-        session.setAttribute("visited", "true");
-    }
-
-    @Override
-    public ResponseEntity<?> getVisitorsCount(){
-        Optional<Visitor> visitorOptional = visitorRepository.findById(1L);
-        if(visitorOptional.isPresent()){
-            Visitor visitor = visitorOptional.get();
-            return ResponseEntity.ok(visitor.getCount().toString());
-        }
-        return new ResponseEntity<>
-                ("Не удается загрузить количество посетителей", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }
