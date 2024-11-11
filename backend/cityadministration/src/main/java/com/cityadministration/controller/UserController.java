@@ -44,6 +44,11 @@ public class UserController {
         return userService.getDashBoard(session);
     }
 
+    @GetMapping("/logout")
+    public ResponseEntity<?> userLogout(HttpSession session){
+        return userService.userLogout(session);
+    }
+
     @ExceptionHandler(FileUploadException.class)
     public ResponseEntity<String> handleFileUploadException(FileUploadException ex){
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);

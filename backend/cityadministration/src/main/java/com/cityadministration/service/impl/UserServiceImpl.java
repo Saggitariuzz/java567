@@ -64,7 +64,8 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> loginUser(UserLoginDTO userLoginDTO, HttpSession session) {
         Optional<User> userOptional = userRepository.findByUsername(userLoginDTO.getUsername());
         if(userOptional.isEmpty()){
-            return new ResponseEntity<>("Пользователь с таким логином не зарегистрирован", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>
+                    ("Пользователь с таким логином не зарегистрирован", HttpStatus.NOT_FOUND);
         }
         User user = userOptional.get();
         if (!user.getPassword().equals(userLoginDTO.getPassword())) {
@@ -91,5 +92,14 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         return ResponseEntity.ok(userResponseDTO);
+    }
+
+    @Override
+    public ResponseEntity<?> userLogout(HttpSession session){
+        if(session.getAttribute("user") == null){
+            return new ResponseEntity<>("Вы не вошли в аккаунт", HttpStatus.BAD_REQUEST);
+        }
+        session.removeAttribute("user");
+        return ResponseEntity.ok("Вы успешно вышли из аккаунта");
     }
 }

@@ -14,5 +14,7 @@ public interface UserService {
     ResponseEntity<?> checkUserLogin(HttpSession session);
 
     ResponseEntity<?> getDashBoard(HttpSession session);
+
+    ResponseEntity<?> userLogout(HttpSession session);
 }
 
