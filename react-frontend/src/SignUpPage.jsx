@@ -12,29 +12,28 @@ function SignupPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [role, setRole] = useState('ROLE_CUSTOMER');
-    const [mobile, setMobileNumber] = useState('');
     const [error, setError] = useState('');
     const [avatar, setPhoto] = useState(null); // State for the uploaded photo
     const history = useNavigate();
 
     const handleSignup = async () => {
         try {
-            if (!username || !email || !password || !confirmPassword || !avatar) {
-                setError('Please fill in all fields.');
+            if (!username || !email || !password || !confirmPassword) {
+                setError('Пожалуйста, заполните все поля.');
                 return;
             }
 
             if (password !== confirmPassword) {
-                throw new Error("Passwords do not match");
+                throw new Error("Пароли не совпадают");
             }
 
             const formData = new FormData();
             formData.append('username', username);
             formData.append('password', password);
             formData.append('email', email);
-            formData.append('avatar', avatar); // Append the photo to the form data
-
+            if(avatar){
+                formData.append('avatar', avatar);
+            }
             const response = await axios.post('http://localhost:8080/register', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -55,24 +54,24 @@ function SignupPage() {
                 <MDBContainer className="p-3">
                     <h2 className="mb-4 text-center">Регистрация</h2>
                     {error && <p className="text-danger">{error}</p>}
-                    <MDBInput wrapperClass='mb-3' id='fullName' placeholder={"Full Name"} value={username} type='text'
+                    <MDBInput wrapperClass='mb-3' id='fullName' placeholder={"Имя пользователя"} value={username} type='text'
                               onChange={(e) => setUsername(e.target.value)} />
-                    <MDBInput wrapperClass='mb-3' placeholder='Email Address' id='email' value={email} type='email'
+                    <MDBInput wrapperClass='mb-3' placeholder='Адрес электронной почты' id='email' value={email} type='email'
                               onChange={(e) => setEmail(e.target.value)} />
-                    <MDBInput wrapperClass='mb-3' placeholder='Password' id='password' type='password' value={password}
+                    <MDBInput wrapperClass='mb-3' placeholder='Пароль' id='password' type='password' value={password}
                               onChange={(e) => setPassword(e.target.value)} />
-                    <MDBInput wrapperClass='mb-3' placeholder='Confirm Password' id='confirmPassword' type='password'
+                    <MDBInput wrapperClass='mb-3' placeholder='Повторите пароль' id='confirmPassword' type='password'
                               value={confirmPassword}
                               onChange={(e) => setConfirmPassword(e.target.value)} />
                     <MDBInput wrapperClass='mb-3' type='file' id='avatar' onChange={(e) => setPhoto(e.target.files[0])} />
                     
                     <button className="mb-4 d-block mx-auto fixed-action-btn btn-primary"
                             style={{ height: '40px', width: '100%' }}
-                            onClick={handleSignup}>Sign Up
+                            onClick={handleSignup}>Зарегистрироваться   
                     </button>
 
                     <div className="text-center">
-                        <p>Already Register? <a href="/login">Login</a></p>
+                        <p>Уже зарегистрированы? <a href="/login">Войти</a></p>
                     </div>
 
                 </MDBContainer>

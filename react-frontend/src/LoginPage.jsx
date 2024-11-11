@@ -17,7 +17,7 @@ function LoginPage() {
                 setError('Please enter both username and password.');
                 return;
             }
-            const response = await axios.post('http://localhost:8081/auth/signin', { username, password });
+            const response = await axios.post('http://localhost:8080/login', { username, password });
             console.log('Login successful:', response.data);
             navigate('/dashboard');  // Здесь используем navigate вместо history
         } catch (error) {
@@ -56,7 +56,7 @@ function LoginPage() {
                         Войти
                     </button>
                     <div className="text-center">
-                        <p>Еще не зарегистрированы ? <a href="/signup">Регистрация</a></p>
+                        <p>Еще не зарегистрированы? <a href="/signup">Регистрация</a></p>
                     </div>
 
                 </MDBContainer>

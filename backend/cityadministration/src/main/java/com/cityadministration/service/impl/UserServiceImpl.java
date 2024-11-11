@@ -1,10 +1,13 @@
 package com.cityadministration.service.impl;
 
 import com.cityadministration.dto.UserCreateDTO;
+import com.cityadministration.dto.UserLoginDTO;
 import com.cityadministration.dto.UserResponseDTO;
 import com.cityadministration.entity.User;
 import com.cityadministration.exception.DuplicateUserException;
 import com.cityadministration.exception.FileUploadException;
+import com.cityadministration.exception.PasswordDontMatchException;
+import com.cityadministration.exception.UserNotFoundException;
 import com.cityadministration.mapper.UserMapper;
 import com.cityadministration.repository.UserRepository;
 import com.cityadministration.service.UserService;
@@ -14,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -50,5 +54,15 @@ public class UserServiceImpl implements UserService {
         }
         User savedUser = userRepository.save(user);
         return UserMapper.userToUserResponseDto(savedUser);
+    }
+
+    @Override
+    public UserResponseDTO loginUser(UserLoginDTO userLoginDTO){
+        User user = userRepository.findByUsername(userLoginDTO.getUsername())
+                .orElseThrow(() -> new UserNotFoundException("Пользователь с таким логином не зарегистрирован"));
+        if(!user.getPassword().equals(userLoginDTO.getPassword())){
+            throw new PasswordDontMatchException("Неправильный пароль");
+        }
+        return UserMapper.userToUserResponseDto(user);
     }
 }
