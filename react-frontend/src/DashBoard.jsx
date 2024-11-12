@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function WelcomeDashboard() {
+function WelcomeDashboard({onLogout}) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [role, setRole] = useState('');
@@ -36,21 +36,6 @@ function WelcomeDashboard() {
         fetchUserInfo();
     }, []);  // Пустой массив зависимостей, чтобы запрос выполнялся только при монтировании компонента
 
-    const handleLogout = async() =>{
-        try{
-            const response = await axios.get('http://localhost:8080/logout', {
-                withCredentials: true,
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            navigate('/');    
-        }catch(error){
-            setError('Не удалось выйти');
-            console.error(error);
-        }
-    }
-
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
@@ -71,7 +56,7 @@ function WelcomeDashboard() {
                     </>
                 )}
                 <div className="text-center">
-                    <button type="button" className="btn btn-primary mt-3" onClick={handleLogout}>
+                    <button type="button" className="btn btn-primary mt-3" onClick={onLogout}>
                         Выйти
                     </button>
                 </div>

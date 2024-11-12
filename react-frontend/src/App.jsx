@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import LoginPage from './LoginPage';
 import SignupPage from './SignUpPage';
@@ -13,40 +13,48 @@ function App() {
   const [buttonsStatus, setButtonsStatus] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    // Функция для запроса состояния авторизации
-    const getButtons = async () => {
+  const getButtons = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/checklogin", {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      setButtonsStatus(response.status); // Устанавливаем статус кнопок
+    } catch (error) {
+      setError("Не удалось загрузить кнопки");
+      console.error(error);
+    }
+  };
+
+
+
+  function AppContent(){
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/checklogin", {
+        await axios.get("http://localhost:8080/logout", {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json"
           }
         });
-        setButtonsStatus(response.status); // Устанавливаем статус кнопок
+        setButtonsStatus(''); // Сбрасываем статус кнопок после выхода
+        navigate('/');
       } catch (error) {
-        setError("Не удалось загрузить кнопки");
-        console.error(error);
+        console.error("Ошибка при выходе:", error);
       }
     };
 
-    // Запрос состояния при монтировании компонента
-    getButtons();
+    useEffect(()=>{
+      getButtons();
+    }, [location])
 
-    // Таймер для регулярной проверки состояния
-    const intervalId = setInterval(() => {
-      getButtons();  // Обновляем состояние каждые 1 секунду
-    }, 1000);
-    
-
-    // Очистка таймера при размонтировании компонента
-    return () => clearInterval(intervalId);
-
-  }, []);  // Пустой массив зависимостей, чтобы запрос выполнялся только при монтировании
-
-  return (
-    <div className="App">
-      <Router>
+    return (
+      <>
         <div className="header d-flex justify-content-between align-items-center p-3">
           <div className="d-flex align-items-center">
             <Link to="/" className="btn btn-secondary">Арзамас</Link>
@@ -69,12 +77,19 @@ function App() {
             <Route path="/news" element={<NewsPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard  onLogout={handleLogout}/>} />
           </Routes>
         </div>
+      </>
+    );
+  }
+  return (
+    <div className="App">
+      <Router>
+        <AppContent />
       </Router>
     </div>
   );
-}
+  }
 
 export default App;
