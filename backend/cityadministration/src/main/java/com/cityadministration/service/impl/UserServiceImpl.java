@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService {
         }
         UserResponseDTO userResponseDTO = UserMapper.userToUserResponseDto(user);
         session.setAttribute("user", userResponseDTO);
+        System.out.println(session.getAttribute("user"));
         return ResponseEntity.ok(userResponseDTO);
     }
 

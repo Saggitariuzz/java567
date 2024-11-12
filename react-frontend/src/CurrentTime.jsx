@@ -8,6 +8,7 @@ function CurrentTime() {
     const [visitorError, setVisitorError] = useState('');
 
     useEffect(() => {
+
         // Функция для обновления времени
         const updateCurrentTime = async () => {
             try {
@@ -18,35 +19,37 @@ function CurrentTime() {
             }
         };
 
+        updateCurrentTime();
 
-        // Функция для регистрации нового посетителя
+        const interval = setInterval(() => {
+            updateCurrentTime();
+        }, 10000000);
+
+        return () => clearInterval(interval); 
+    }, []);
+
+    useEffect(()=>{
         const registerVisitor = async () => {
             try {
-                const response = await axios.get("http://localhost:8080/incrementvisitor");
+                const response = await axios.get("http://localhost:8080/incrementvisitor", {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
                 setVisitorCount(response.data);
             } catch (error) {
-                console.error("Ошибка при регистрации посетителя");
+                console.error("Ошибка при регистрации посетителя", error);
                 setVisitorError("Ошибка при регистрации посетителя");
             }
         };
-
-        // Вызов функций при монтировании компонента
-        registerVisitor(); // Register visitor only once
-        updateCurrentTime();
-
-        // Установка интервала для обновления времени
-        const interval = setInterval(() => {
-            updateCurrentTime();
-        }, 10000000); // Обновляем каждую секунду
-
-        return () => clearInterval(interval); // Очистка интервала при размонтировании
-    }, []);
+        registerVisitor();
+    }, [])
 
     return (
         <div>
             {error && <div>{error}</div>}
             <div>{time}</div>
-            <br />
             {visitorError && <div>{visitorError}</div>}
             <div>{`Количество посетителей: ${visitorCount}`}</div>
         </div>

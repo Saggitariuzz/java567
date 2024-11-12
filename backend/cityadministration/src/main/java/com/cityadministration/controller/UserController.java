@@ -6,6 +6,7 @@ import com.cityadministration.exception.FileUploadException;
 import com.cityadministration.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
+
+    @Autowired
+    public HttpSession session;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(
@@ -30,22 +34,22 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginDTO userLoginDTO, HttpSession session){
+    public ResponseEntity<?> login(@RequestBody UserLoginDTO userLoginDTO){
         return userService.loginUser(userLoginDTO, session);
     }
 
     @GetMapping("/checklogin")
-    public ResponseEntity<?> checkLogin(HttpSession session){
+    public ResponseEntity<?> checkLogin(){
         return userService.checkUserLogin(session);
     }
 
     @GetMapping("/dashboard")
-    public ResponseEntity<?> getDashBoard(HttpSession session){
+    public ResponseEntity<?> getDashBoard(){
         return userService.getDashBoard(session);
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<?> userLogout(HttpSession session){
+    public ResponseEntity<?> userLogout(){
         return userService.userLogout(session);
     }
 

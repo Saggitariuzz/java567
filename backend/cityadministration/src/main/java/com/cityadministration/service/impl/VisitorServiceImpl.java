@@ -21,20 +21,22 @@ public class VisitorServiceImpl implements VisitorService {
     @Override
     @Transactional
     public ResponseEntity<?> incrementVisitorCount(HttpSession session){
+        Optional<Visitor> visitorOptional = visitorRepository.findById(1L);
+        Visitor visitor;
+        if(visitorOptional.isPresent()){
+            visitor = visitorOptional.get();
+        }else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         String visitedStatus = (String) session.getAttribute("visited");
         System.out.println("Visited status: " + visitedStatus);
         if(visitedStatus == null){
-            Optional<Visitor> visitorOptional = visitorRepository.findById(1L);
-            if(visitorOptional.isPresent()){
-                Visitor visitor = visitorOptional.get();
-                Long count = visitor.getCount() + 1;
-                visitor.setCount(count);
-                visitorRepository.save(visitor);
-                session.setAttribute("visited", "true");
-                return ResponseEntity.ok(count);
-            }
+            Long count = visitor.getCount() + 1;
+            visitor.setCount(count);
+            visitorRepository.save(visitor);
+            session.setAttribute("visited", "true");
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(visitor.getCount());
     }
 
 }
