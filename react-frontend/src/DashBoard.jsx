@@ -6,6 +6,9 @@ import { useNavigate } from 'react-router-dom';
 function WelcomeDashboard() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
+    const [role, setRole] = useState('');
+    const [id, setId] = useState('');
+    const [avatar, setAvatar] = useState(null);  // Для хранения изображения
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
@@ -16,16 +19,25 @@ function WelcomeDashboard() {
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/dashboard');
-                console.log(response.data); // Это поможет проверить данные в консоли
+                const response = await axios.get('http://localhost:8080/dashboard', {
+                    withCredentials: true,
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
                 setUsername(response.data.username);  // Устанавливаем username
-                setEmail(response.data.email);        // Устанавливаем email
+                setEmail(response.data.email); 
+                setRole(response.data.role);
+                setId(response.data.id);
+                if (response.data.avatar) {
+                    setAvatar(`data:image/jpeg;base64,${response.data.avatar}`);
+                }
             } catch (error) {
                 setError('Не удалось загрузить информацию о пользователе');
                 console.error(error);
             }
         };
-
+        fetchUserInfo();
     }, []);  // Пустой массив зависимостей, чтобы запрос выполнялся только при монтировании компонента
 
     return (
@@ -36,8 +48,14 @@ function WelcomeDashboard() {
                     <p className="text-danger text-center">{error}</p>
                 ) : (
                     <>
+                        <div className="text-center mb-4">
+                            {avatar && <img src={avatar} alt="User Avatar" style={{ width: '100px', height: '100px', borderRadius: '20px' }} />}
+                        </div>
+                        
+                        {/* <p className="mb-4 mt-4 text-center">ID: {id}</p> */}
                         <p className="mb-4 text-center">Имя пользователя: {username}</p>
                         <p className="text-center">Электронная почта: {email}</p>
+                        <p className="mb-4 text-center">Роль: {role}</p>
                     </>
                 )}
                 <div className="text-center">

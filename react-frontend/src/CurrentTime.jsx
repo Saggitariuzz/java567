@@ -28,7 +28,7 @@ function CurrentTime() {
         return () => clearInterval(interval); 
     }, []);
 
-    useEffect(()=>{
+    useEffect(() => {
         const registerVisitor = async () => {
             try {
                 const response = await axios.get("http://localhost:8080/incrementvisitor", {
@@ -44,8 +44,8 @@ function CurrentTime() {
             }
         };
         registerVisitor();
-    }, [])
-
+    }, []);
+    
     return (
         <div>
             {error && <div>{error}</div>}
