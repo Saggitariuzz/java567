@@ -1,13 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import axios from 'axios';
 import LoginPage from './LoginPage';
-import SignupPage from './SignupPage';
-import Dashboard from './Dashboard';
+import SignupPage from './SignUpPage';
+import Dashboard from './DashBoard';
 import CityPage from './CityPage';
 import CurrentTime from './CurrentTime';
-import NewsPage from './NewsPage'; // Импортируем компонент новостей
+import NewsPage from './NewsPage';
+import AuthButtons from './AuthButtons';
 
 function App() {
+  const [buttonsStatus, setButtonsStatus] = useState('');
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    // Функция для запроса состояния авторизации
+    const getButtons = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/checklogin", {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        setButtonsStatus(response.status); // Устанавливаем статус кнопок
+      } catch (error) {
+        setError("Не удалось загрузить кнопки");
+        console.error(error);
+      }
+    };
+
+    // Запрос состояния при монтировании компонента
+    getButtons();
+
+    // Таймер для регулярной проверки состояния
+    const intervalId = setInterval(() => {
+      getButtons();  // Обновляем состояние каждые 1 секунду
+    }, 1000);
+    
+
+    // Очистка таймера при размонтировании компонента
+    return () => clearInterval(intervalId);
+
+  }, []);  // Пустой массив зависимостей, чтобы запрос выполнялся только при монтировании
+
   return (
     <div className="App">
       <Router>
@@ -21,9 +57,9 @@ function App() {
             <CurrentTime />
           </div>
 
+          {/* Используем компонент AuthButtons для отображения кнопок */}
           <div>
-            <Link to="/login" className="btn btn-primary mx-2">Вход</Link>
-            <Link to="/signup" className="btn btn-primary">Регистрация</Link>
+            <AuthButtons buttonsStatus={buttonsStatus} />
           </div>
         </div>
         
