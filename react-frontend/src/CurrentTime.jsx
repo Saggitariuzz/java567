@@ -27,31 +27,11 @@ function CurrentTime() {
 
         return () => clearInterval(interval); 
     }, []);
-
-    useEffect(() => {
-        const registerVisitor = async () => {
-            try {
-                const response = await axios.get("http://localhost:8080/incrementvisitor", {
-                    withCredentials: true,
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                });
-                setVisitorCount(response.data);
-            } catch (error) {
-                console.error("Ошибка при регистрации посетителя", error);
-                setVisitorError("Ошибка при регистрации посетителя");
-            }
-        };
-        registerVisitor();
-    }, []);
     
     return (
         <div>
             {error && <div>{error}</div>}
             <div>{time}</div>
-            {visitorError && <div>{visitorError}</div>}
-            <div>{`Количество посетителей: ${visitorCount}`}</div>
         </div>
     );
 }

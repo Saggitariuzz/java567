@@ -8,6 +8,7 @@ import CityPage from './CityPage';
 import CurrentTime from './CurrentTime';
 import NewsPage from './NewsPage';
 import AuthButtons from './AuthButtons';
+import VisitorCount from './VisitorCount';
 
 function App() {
   const [buttonsStatus, setButtonsStatus] = useState('');
@@ -61,11 +62,11 @@ function App() {
             <Link to="/news" className="btn btn-secondary mx-2">Новости</Link>
           </div>
           
-          <div className="current-time">
+          <div className="center-block">
             <CurrentTime />
+            <VisitorCount />
           </div>
 
-          {/* Используем компонент AuthButtons для отображения кнопок */}
           <div>
             <AuthButtons buttonsStatus={buttonsStatus} />
           </div>
