@@ -23,7 +23,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final static String IMAGE_PATH = "D:\\web5\\java567\\backend\\cityadministration\\src\\main\\" +
+    private final static String IMAGE_PATH = "C:\\Users\\Егор\\IdeaProjects\\java56789\\backend\\cityadministration\\src\\main\\" +
             "resources\\static\\images";
 
     private UserRepository userRepository;
