@@ -7,6 +7,7 @@ function VisitorCount() {
     const [visitorError, setVisitorError] = useState('');
 
     useEffect(() => {
+        console.log("useEffect вызван");
         const registerVisitor = async () => {
             try {
                 const response = await axios.get("http://localhost:8080/incrementvisitor", {
