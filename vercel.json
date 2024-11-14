@@ -5,8 +5,8 @@
     ],
     "routes": [
         { 
-          "src": "/(.*)", 
-          "dest": "app.jsx"
+          "src": "/react-frontend", 
+          "dest": "main.jsx"
         }
       ]
   }
