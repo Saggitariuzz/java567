@@ -15,7 +15,7 @@ public class DateController {
     @GetMapping("/time")
     public ResponseEntity<String> time(){
         try{
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.uuuu HH:mm");
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.uuuu HH:mm:ss");
             LocalDateTime ldt = LocalDateTime.now();
             return ResponseEntity.ok(dtf.format(ldt));
         }catch (Exception ex){

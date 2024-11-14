@@ -2,7 +2,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/cityadministration
-    username: postgres
+    username: root
     password: "123"
   jpa:
     hibernate:
@@ -22,4 +22,4 @@ spring:
           same-site: Lax
           secure: false
           http-only: true
-        timeout: 30m
+          max-age: 1800

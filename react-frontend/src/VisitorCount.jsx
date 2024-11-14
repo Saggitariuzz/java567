@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 
 function VisitorCount() {
     const [visitorCount, setVisitorCount] = useState(0);  // Начальное значение - 0
-    const [error, setError] = useState('');
     const [visitorError, setVisitorError] = useState('');
 
     useEffect(() => {

@@ -23,40 +23,22 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final static String IMAGE_PATH = "C:\\Users\\Егор\\IdeaProjects\\java56789\\backend\\cityadministration\\src\\main\\" +
-            "resources\\static\\images";
+    private final static String IMAGE_PATH = "D:\\webtest5\\java567\\backend\\cityadministration\\src\\main" +
+            "\\resources\\static\\images";
 
     private UserRepository userRepository;
 
     @Override
     public ResponseEntity<?> registerUser(UserCreateDTO userCreateDTO) {
-        if (userRepository.findByUsername(userCreateDTO.getUsername()).isPresent()) {
-            return new ResponseEntity<>("Пользователь с таким логином уже зарегистрирован",
-                    HttpStatus.CONFLICT);
+        Optional<String> error = checkIfUserExists(userCreateDTO);
+        if (error.isPresent()) {
+            return new ResponseEntity<>(error.get(), HttpStatus.CONFLICT);
         }
-        if (userRepository.findByEmail(userCreateDTO.getEmail()).isPresent()) {
-            return new ResponseEntity<>("Пользователь с такой почтой уже зарегистрирован",
-                    HttpStatus.CONFLICT);
+        error = validateUserInput(userCreateDTO);
+        if (error.isPresent()) {
+            return new ResponseEntity<>(error.get(), HttpStatus.BAD_REQUEST);
         }
-        User user = new User();
-        user.setUsername(userCreateDTO.getUsername());
-        user.setPassword(userCreateDTO.getPassword());
-        user.setEmail(userCreateDTO.getEmail());
-        user.setRole("USER");
-        if (userCreateDTO.getAvatar() != null) {
-            try {
-                MultipartFile avatar = userCreateDTO.getAvatar();
-                String Filename = userCreateDTO.getUsername() + "_" + avatar.getOriginalFilename();
-                File file = new File(IMAGE_PATH, Filename);
-                avatar.transferTo(file);
-                user.setAvatar(IMAGE_PATH + "\\" + Filename);
-            } catch (IOException e) {
-                throw new FileUploadException("Не удалось загрузить аватар");
-            }
-        }else {
-            user.setAvatar(IMAGE_PATH + "\\DEFAULT.png");
-        }
-        User savedUser = userRepository.save(user);
+        User savedUser = userRepository.save(getUser(userCreateDTO));
         return ResponseEntity.ok(UserMapper.userToUserResponseDto(savedUser));
     }
 
@@ -102,5 +84,55 @@ public class UserServiceImpl implements UserService {
         }
         session.removeAttribute("user");
         return ResponseEntity.ok("Вы успешно вышли из аккаунта");
+    }
+
+    private static User getUser(UserCreateDTO userCreateDTO) {
+        User user = new User();
+        user.setUsername(userCreateDTO.getUsername());
+        user.setPassword(userCreateDTO.getPassword());
+        user.setEmail(userCreateDTO.getEmail());
+        user.setRole("USER");
+        if (userCreateDTO.getAvatar() != null) {
+            try {
+                MultipartFile avatar = userCreateDTO.getAvatar();
+                String Filename = userCreateDTO.getUsername() + "_" + avatar.getOriginalFilename();
+                File file = new File(IMAGE_PATH, Filename);
+                avatar.transferTo(file);
+                user.setAvatar(IMAGE_PATH + "\\" + Filename);
+            } catch (IOException e) {
+                throw new FileUploadException("Не удалось загрузить аватар");
+            }
+        }else {
+            user.setAvatar(IMAGE_PATH + "\\DEFAULT.png");
+        }
+        return user;
+    }
+
+    private Optional<String> checkIfUserExists(UserCreateDTO userCreateDTO) {
+        if (userRepository.findByUsername(userCreateDTO.getUsername()).isPresent()) {
+            return Optional.of("Пользователь с таким логином уже зарегистрирован");
+        }
+        if (userRepository.findByEmail(userCreateDTO.getEmail()).isPresent()) {
+            return Optional.of("Пользователь с такой почтой уже зарегистрирован");
+        }
+        return Optional.empty();
+    }
+
+    private Optional<String> validateUserInput(UserCreateDTO userCreateDTO) {
+        if (!userCreateDTO.getUsername().matches
+                ("^[a-zA-Z0-9]+$")) {
+            return Optional.of("Неверное имя пользователя. " +
+                    "Используйте только латинские буквы и цифры");
+        }
+        if (!userCreateDTO.getEmail().matches
+                ("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+            return Optional.of("Неверный адрес электронной почты");
+        }
+        if (!userCreateDTO.getPassword().matches
+                ("^[a-zA-Z0-9!@#$%^&*()_\\-+=\\[\\]{}|;:'\",.<>?/]{5,}$")) {
+            return Optional.of("Пароль должен содержать минимум 5 символов: букв латинского" +
+                    " алфавита, цифр или спецсимволов");
+        }
+        return Optional.empty();
     }
 }

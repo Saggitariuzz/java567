@@ -28,7 +28,7 @@ function LoginPage() {
             navigate('/dashboard');  // Здесь используем navigate вместо history
         } catch (error) {
             console.error('Login failed:', error.response ? error.response.data : error.message);
-            setError('Invalid username or password.');  
+            setError('Неправильный логин или пароль');  
         }
     };
 
@@ -39,7 +39,7 @@ function LoginPage() {
                     <h2 className="mb-4 text-center">Вход</h2>
                     <MDBInput
                         wrapperClass='mb-4'
-                        placeholder='Электронная почта'
+                        placeholder='Имя пользователя'
                         id='email'
                         value={username}
                         type='email'

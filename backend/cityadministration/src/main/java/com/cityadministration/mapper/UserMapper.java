@@ -10,17 +10,6 @@ import java.nio.file.Paths;
 
 public class UserMapper {
 
-    public static User userResponseDtoToUser(User userResponseDTO){
-        return new User(
-                userResponseDTO.getId(),
-                userResponseDTO.getUsername(),
-                userResponseDTO.getPassword(),
-                userResponseDTO.getEmail(),
-                userResponseDTO.getAvatar(),
-                userResponseDTO.getRole()
-        );
-    }
-
     public static UserResponseDTO userToUserResponseDto (User user){
         try{
             byte[] avatar = Files.readAllBytes(Paths.get(user.getAvatar()));

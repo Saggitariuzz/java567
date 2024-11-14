@@ -19,8 +19,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @Autowired
-    public HttpSession session;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(
@@ -34,22 +32,22 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginDTO userLoginDTO){
+    public ResponseEntity<?> login(@RequestBody UserLoginDTO userLoginDTO, HttpSession session){
         return userService.loginUser(userLoginDTO, session);
     }
 
     @GetMapping("/checklogin")
-    public ResponseEntity<?> checkLogin(){
+    public ResponseEntity<?> checkLogin(HttpSession session){
         return userService.checkUserLogin(session);
     }
 
     @GetMapping("/dashboard")
-    public ResponseEntity<?> getDashBoard(){
+    public ResponseEntity<?> getDashBoard(HttpSession session){
         return userService.getDashBoard(session);
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<?> userLogout(){
+    public ResponseEntity<?> userLogout(HttpSession session){
         return userService.userLogout(session);
     }
 

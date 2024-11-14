@@ -8,7 +8,7 @@ function NewsPage() {
         // Запрос к серверу для получения новостей
         const fetchNews = async () => {
             try {
-                const response = await axios.get('http://localhost:8081/news'); // Замените на ваш API-эндпоинт
+                const response = await axios.get('http://localhost:8080/news');
                 setNews(response.data);
             } catch (error) {
                 console.error('Error fetching news:', error);

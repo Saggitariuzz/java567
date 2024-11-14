@@ -19,7 +19,6 @@ public class VisitorServiceImpl implements VisitorService {
     private VisitorRepository visitorRepository;
 
     @Override
-    @Transactional
     public ResponseEntity<?> incrementVisitorCount(HttpSession session){
         Optional<Visitor> visitorOptional = visitorRepository.findById(1L);
         Visitor visitor;
