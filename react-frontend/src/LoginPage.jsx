@@ -1,8 +1,9 @@
-// LoginPage.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MDBContainer, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function LoginPage() {
     const [username, setUsername] = useState('');
@@ -34,12 +35,26 @@ function LoginPage() {
         }
     };
 
+    useEffect(() => {
+        if (message) {
+            toast.success(message, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    }, [message]);
+
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
             <div className="border rounded-lg p-4" style={{ width: '500px', height: 'auto' }}>
                 <MDBContainer className="p-3">
                     <h2 className="mb-4 text-center">Вход</h2>
-                    {message && <div className="mb-4 text-center">{message}</div>}
+                    <ToastContainer/>
                     <MDBInput
                         wrapperClass='mb-4'
                         placeholder='Имя пользователя'

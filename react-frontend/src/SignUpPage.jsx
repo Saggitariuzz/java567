@@ -63,7 +63,7 @@ function SignupPage() {
                     <MDBInput wrapperClass='mb-3' placeholder='Повторите пароль' id='confirmPassword' type='password'
                               value={confirmPassword}
                               onChange={(e) => setConfirmPassword(e.target.value)} />
-                    <MDBInput wrapperClass='mb-3' type='file' id='avatar' onChange={(e) => setPhoto(e.target.files[0])} />
+                    <MDBInput wrapperClass='mb-3' type='file' accept='image/*' id='avatar' onChange={(e) => setPhoto(e.target.files[0])} />
                     
                     <button className="mb-4 d-block mx-auto fixed-action-btn btn-primary"
                             style={{ height: '40px', width: '100%' }}
