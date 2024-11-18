@@ -1,13 +1,15 @@
 // LoginPage.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MDBContainer, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
 
 function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const location = useLocation();
+    const message = location.state?.message;
 
     const navigate = useNavigate();
 
@@ -25,7 +27,7 @@ function LoginPage() {
                 }
             );
             console.log('Login successful:', response.data);
-            navigate('/dashboard');  // Здесь используем navigate вместо history
+            navigate('/dashboard');
         } catch (error) {
             console.error('Login failed:', error.response ? error.response.data : error.message);
             setError('Неправильный логин или пароль');  
@@ -37,6 +39,7 @@ function LoginPage() {
             <div className="border rounded-lg p-4" style={{ width: '500px', height: 'auto' }}>
                 <MDBContainer className="p-3">
                     <h2 className="mb-4 text-center">Вход</h2>
+                    {message && <div className="mb-4 text-center">{message}</div>}
                     <MDBInput
                         wrapperClass='mb-4'
                         placeholder='Имя пользователя'

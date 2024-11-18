@@ -8,8 +8,10 @@ import com.cityadministration.exception.FileUploadException;
 import com.cityadministration.mapper.UserMapper;
 import com.cityadministration.repository.UserRepository;
 import com.cityadministration.service.UserService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,9 +25,6 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final static String IMAGE_PATH = "D:\\webtest5\\java567\\backend\\cityadministration\\src\\main" +
-            "\\resources\\static\\images";
-
     private UserRepository userRepository;
 
     @Override
@@ -38,7 +37,7 @@ public class UserServiceImpl implements UserService {
         if (error.isPresent()) {
             return new ResponseEntity<>(error.get(), HttpStatus.BAD_REQUEST);
         }
-        User savedUser = userRepository.save(getUser(userCreateDTO));
+        User savedUser = userRepository.save(UserMapper.userCreateDtoToUser(userCreateDTO));
         return ResponseEntity.ok(UserMapper.userToUserResponseDto(savedUser));
     }
 
@@ -84,28 +83,6 @@ public class UserServiceImpl implements UserService {
         }
         session.removeAttribute("user");
         return ResponseEntity.ok("Вы успешно вышли из аккаунта");
-    }
-
-    private static User getUser(UserCreateDTO userCreateDTO) {
-        User user = new User();
-        user.setUsername(userCreateDTO.getUsername());
-        user.setPassword(userCreateDTO.getPassword());
-        user.setEmail(userCreateDTO.getEmail());
-        user.setRole("USER");
-        if (userCreateDTO.getAvatar() != null) {
-            try {
-                MultipartFile avatar = userCreateDTO.getAvatar();
-                String Filename = userCreateDTO.getUsername() + "_" + avatar.getOriginalFilename();
-                File file = new File(IMAGE_PATH, Filename);
-                avatar.transferTo(file);
-                user.setAvatar(IMAGE_PATH + "\\" + Filename);
-            } catch (IOException e) {
-                throw new FileUploadException("Не удалось загрузить аватар");
-            }
-        }else {
-            user.setAvatar(IMAGE_PATH + "\\DEFAULT.png");
-        }
-        return user;
     }
 
     private Optional<String> checkIfUserExists(UserCreateDTO userCreateDTO) {

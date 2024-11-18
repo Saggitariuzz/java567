@@ -41,7 +41,7 @@ function SignupPage() {
             });
 
             console.log(response.data);
-            history('/login');
+            history('/login', {state:{message: "Вы успешно зарегистрировались!"}});
         } catch (error) {
             console.error('Signup failed:', error.response ? error.response.data : error.message);
             setError(error.response ? error.response.data : error.message);
