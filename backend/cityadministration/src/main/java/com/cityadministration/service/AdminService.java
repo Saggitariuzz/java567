@@ -29,4 +29,6 @@ public interface AdminService {
             String role,
             MultipartFile avatar
     );
+
+    ResponseEntity<?> getInfo(Long id, HttpSession session);
 }

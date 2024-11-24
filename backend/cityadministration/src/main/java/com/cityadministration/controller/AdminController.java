@@ -24,6 +24,11 @@ public class AdminController {
         return adminService.deleteUser(session, id);
     }
 
+    @GetMapping("/update/{id}")
+    public ResponseEntity<?> getInfo(@PathVariable Long id, HttpSession session){
+        return adminService.getInfo(id, session);
+    }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateUser(
             HttpSession session,

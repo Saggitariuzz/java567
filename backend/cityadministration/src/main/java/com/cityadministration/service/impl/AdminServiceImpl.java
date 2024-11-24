@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
@@ -109,6 +110,17 @@ public class AdminServiceImpl implements AdminService {
         user.setAvatar(UserMapper.processAvatar(avatar, username));
         User savedUser = userRepository.save(user);
         return ResponseEntity.ok(savedUser);
+    }
+
+    public ResponseEntity<?> getInfo(Long id, HttpSession session){
+        if(!isAdmin(session)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("У Вас недостаточно прав");
+        }
+        Optional<User> userOptional = userRepository.findById(id);
+        if(userOptional.isPresent()){
+            return ResponseEntity.ok(userOptional.get());
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователь не найден");
     }
 
     private Optional<String> checkIfUserExists(String username, String email) {
