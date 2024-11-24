@@ -19,7 +19,7 @@ public class UserResponseDTO implements Serializable {
 
     private String email;
 
-    private byte[] avatar;
+    private String avatar;
 
     private String role;
 }

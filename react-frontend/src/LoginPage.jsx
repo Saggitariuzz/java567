@@ -31,7 +31,7 @@ function LoginPage() {
             navigate('/dashboard');
         } catch (error) {
             console.error('Login failed:', error.response ? error.response.data : error.message);
-            setError('Неправильный логин или пароль');  
+            setError(error.response.data);  
         }
     };
 
@@ -60,7 +60,6 @@ function LoginPage() {
                         placeholder='Имя пользователя'
                         id='email'
                         value={username}
-                        type='email'
                         onChange={(e) => setUsername(e.target.value)}
                     />
                     <MDBInput

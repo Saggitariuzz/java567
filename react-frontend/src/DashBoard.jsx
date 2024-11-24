@@ -21,13 +21,12 @@ function WelcomeDashboard({onLogout}) {
                         "Content-Type": "application/json"
                     }
                 });
+                console.log(response.data);
                 setUsername(response.data.username);  // Устанавливаем username
                 setEmail(response.data.email); 
                 setRole(response.data.role);
                 setId(response.data.id);
-                if (response.data.avatar) {
-                    setAvatar(`data:image/jpeg;base64,${response.data.avatar}`);
-                }
+                setAvatar(response.data.avatar);
             } catch (error) {
                 setError('Не удалось загрузить информацию о пользователе');
                 console.error(error);

@@ -13,7 +13,7 @@ function SignupPage() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
-    const [avatar, setPhoto] = useState(null); // State for the uploaded photo
+    const [avatar, setPhoto] = useState(null);
     const history = useNavigate();
 
     const handleSignup = async () => {

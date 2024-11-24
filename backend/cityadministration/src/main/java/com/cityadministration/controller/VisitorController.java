@@ -16,11 +16,8 @@ public class VisitorController {
 
     private final VisitorService visitorService;
 
-    @Autowired
-    public HttpSession session;
-
     @GetMapping("/incrementvisitor")
-    public ResponseEntity<?> incrementVisitorCount(){
+    public ResponseEntity<?> incrementVisitorCount(HttpSession session){
         return visitorService.incrementVisitorCount(session);
     }
 }
