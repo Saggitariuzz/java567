@@ -1,6 +1,5 @@
 package com.cityadministration.service.impl;
 
-import com.cityadministration.dto.UserCreateDTO;
 import com.cityadministration.dto.UserResponseDTO;
 import com.cityadministration.entity.User;
 import com.cityadministration.mapper.UserMapper;
@@ -11,7 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
@@ -35,7 +33,7 @@ public class AdminServiceImpl implements AdminService {
         if(!isAdmin(session)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("У Вас недостаточно прав");
         }
-        return ResponseEntity.ok(userRepository.findAll());
+        return ResponseEntity.ok(UserMapper.usersListToUsersResponseDtoList(userRepository.findAll()));
     }
 
     @Override
@@ -43,6 +41,16 @@ public class AdminServiceImpl implements AdminService {
         if(!isAdmin(session)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("У Вас недостаточно прав");
         }
+        if(id == 1){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Невозможно удалить главного администратора");
+        }
+        Optional<User> userOptional = userRepository.findById(id);
+        User user;
+        if(userOptional.isEmpty()){
+            return ResponseEntity.status(404).body("Пользователь не найден");
+        }
+        user = userOptional.get();
+        UserMapper.deleteAvatar(user.getAvatar());
         userRepository.deleteById(id);
         return ResponseEntity.ok("Пользователь успешно удален");
     }

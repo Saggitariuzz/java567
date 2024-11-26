@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserMapper {
 
@@ -68,6 +70,14 @@ public class UserMapper {
         }catch (IOException ex){
             throw new FileUploadException("Не удалось удалить аватар");
         }
+    }
+
+    public static List<UserResponseDTO> usersListToUsersResponseDtoList(List<User> users){
+        List<UserResponseDTO> userResponseDTOS = new ArrayList<>();
+        for(User user:users){
+            userResponseDTOS.add(userToUserResponseDto(user));
+        }
+        return userResponseDTOS;
     }
 
     public static String getDefaultImageUrl(){

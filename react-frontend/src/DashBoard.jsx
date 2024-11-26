@@ -8,7 +8,7 @@ function WelcomeDashboard({onLogout}) {
     const [email, setEmail] = useState('');
     const [role, setRole] = useState('');
     const [id, setId] = useState('');
-    const [avatar, setAvatar] = useState(null);  // Для хранения изображения
+    const [avatar, setAvatar] = useState(null);
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ function WelcomeDashboard({onLogout}) {
                     }
                 });
                 console.log(response.data);
-                setUsername(response.data.username);  // Устанавливаем username
+                setUsername(response.data.username);
                 setEmail(response.data.email); 
                 setRole(response.data.role);
                 setId(response.data.id);
@@ -33,12 +33,15 @@ function WelcomeDashboard({onLogout}) {
             }
         };
         fetchUserInfo();
-    }, []);  // Пустой массив зависимостей, чтобы запрос выполнялся только при монтировании компонента
+    }, []);
 
+    const handleAdminPanelClick = () => {
+        navigate('/admin-panel'); // Путь на панель администратора
+    };
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
-            <div className="border rounded-lg p-4" style={{ width: '500px', height: '400px' }}>
+            <div className="border rounded-lg p-4" style={{ width: '500px', height: '500px', }}>
                 <h2 className="text-center">Добро пожаловать!</h2>
                 {error ? (
                     <p className="text-danger text-center">{error}</p>
@@ -55,7 +58,18 @@ function WelcomeDashboard({onLogout}) {
                     </>
                 )}
                 <div className="text-center">
-                    <button type="button" className="btn btn-primary mt-3" onClick={onLogout}>
+                {
+                    role === "ADMIN"?(
+                        <button type="button" className="btn btn-primary" onClick={handleAdminPanelClick}>
+                            Панель администратора
+                        </button>
+                    ):(
+                        null
+                    )
+                }
+                </div>
+                <div className="text-center">
+                    <button type="button" className="btn btn-danger mt-3" onClick={onLogout}>
                         Выйти
                     </button>
                 </div>
