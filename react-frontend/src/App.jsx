@@ -9,7 +9,8 @@ import CurrentTime from './CurrentTime';
 import NewsPage from './NewsPage';
 import AuthButtons from './AuthButtons';
 import VisitorCount from './VisitorCount';
-import AdminPanel from './AdminPanel'
+import AdminPanel from './AdminPanel';
+import UpdateUser from './UpdateUser';
 
 function App() {
   const [buttonsStatus, setButtonsStatus] = useState('');
@@ -81,6 +82,7 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/dashboard" element={<Dashboard  onLogout={handleLogout}/>} />
             <Route path="/admin-panel" element={<AdminPanel />} />
+            <Route path="/update/:id" element={<UpdateUser/>}/>
           </Routes>
         </div>
       </>

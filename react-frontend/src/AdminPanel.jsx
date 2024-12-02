@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function AdminPanel() {
@@ -63,11 +64,21 @@ function AdminPanel() {
                                 <td><img src={user.avatar} alt="User Avatar" style={{ width: '100px', height: '100px', borderRadius: '60px' }} /></td>
                                 {user.id === 1 ?(
                                     <td className='d-flex flex-column'>
-                                        <button className="btn btn-primary">Изменить</button>
+                                        <Link
+                                            to={`/update/${user.id}`}
+                                            className = "btn btn-primary"
+                                        >
+                                            Изменить
+                                        </Link>
                                     </td>
                                 ):(
                                     <td className='d-flex flex-column gap-3'>
-                                        <button className="btn btn-primary">Изменить</button>
+                                        <Link
+                                            to={`/update/${user.id}`}
+                                            className = "btn btn-primary"
+                                        >
+                                            Изменить
+                                        </Link>
                                         <button className="btn btn-danger" onClick={() => deleteUser(user.id)}>Удалить</button>
                                     </td>
                                 )}

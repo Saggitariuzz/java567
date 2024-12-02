@@ -20,6 +20,8 @@ public class AdminServiceImpl implements AdminService {
 
     private UserRepository userRepository;
 
+    private static final Long MAIN_ADMIN_ID = 1L;
+
     private boolean isAdmin(HttpSession session){
         UserResponseDTO userResponseDTO = (UserResponseDTO) session.getAttribute("user");
         if(userResponseDTO == null){
@@ -41,8 +43,12 @@ public class AdminServiceImpl implements AdminService {
         if(!isAdmin(session)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("У Вас недостаточно прав");
         }
-        if(id == 1){
+        if(id.equals(MAIN_ADMIN_ID)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Невозможно удалить главного администратора");
+        }
+        UserResponseDTO userResponseDTO = (UserResponseDTO)session.getAttribute("user");
+        if(userResponseDTO.getId().equals(id)){
+            session.removeAttribute("user");
         }
         Optional<User> userOptional = userRepository.findById(id);
         User user;
