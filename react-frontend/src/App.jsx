@@ -11,6 +11,7 @@ import AuthButtons from './AuthButtons';
 import VisitorCount from './VisitorCount';
 import AdminPanel from './AdminPanel';
 import UpdateUser from './UpdateUser';
+import AddUser from './AddUser';
 
 function App() {
   const [buttonsStatus, setButtonsStatus] = useState('');
@@ -83,6 +84,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard  onLogout={handleLogout}/>} />
             <Route path="/admin-panel" element={<AdminPanel />} />
             <Route path="/update/:id" element={<UpdateUser/>}/>
+            <Route path="/add-user" element={<AddUser/>}/>
           </Routes>
         </div>
       </>

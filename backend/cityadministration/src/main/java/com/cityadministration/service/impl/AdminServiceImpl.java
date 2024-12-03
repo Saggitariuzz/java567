@@ -86,7 +86,9 @@ public class AdminServiceImpl implements AdminService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(checker.get());
         };
         user.setUsername(username);
-        user.setPassword(password);
+        if(password != null){
+            user.setPassword(password);
+        }
         user.setEmail(email);
         user.setRole(role);
         if(deleteavatar.equals("true")){
@@ -98,6 +100,11 @@ public class AdminServiceImpl implements AdminService {
             user.setAvatar(UserMapper.processAvatar(avatar, user.getUsername()));
         }
         userRepository.save(user);
+        UserResponseDTO userResponseDTO = (UserResponseDTO)session.getAttribute("user");
+        if(userResponseDTO.getId().equals(id)){
+            session.removeAttribute("user");
+            session.setAttribute("user", UserMapper.userToUserResponseDto(user));
+        }
         return ResponseEntity.ok("Данные изменены");
     }
 
@@ -123,7 +130,7 @@ public class AdminServiceImpl implements AdminService {
         user.setRole(role);
         user.setAvatar(UserMapper.processAvatar(avatar, username));
         User savedUser = userRepository.save(user);
-        return ResponseEntity.ok(savedUser);
+        return ResponseEntity.ok(UserMapper.userToUserResponseDto(savedUser));
     }
 
     public ResponseEntity<?> getInfo(Long id, HttpSession session){
@@ -132,7 +139,7 @@ public class AdminServiceImpl implements AdminService {
         }
         Optional<User> userOptional = userRepository.findById(id);
         if(userOptional.isPresent()){
-            return ResponseEntity.ok(userOptional.get());
+            return ResponseEntity.ok(UserMapper.userToUserResponseDto(userOptional.get()));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователь не найден");
     }

@@ -37,7 +37,7 @@ public class AdminController {
             HttpSession session,
             @PathVariable Long id,
             @RequestParam String username,
-            @RequestParam String password,
+            @RequestParam(required = false) String password,
             @RequestParam String email,
             @RequestParam(value="avatar", required=false) MultipartFile avatar,
             @RequestParam String role,

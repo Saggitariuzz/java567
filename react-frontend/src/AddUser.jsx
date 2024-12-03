@@ -2,54 +2,35 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {
     MDBContainer,
-    MDBInput,
-    MDBCheckbox
+    MDBInput
 } from 'mdb-react-ui-kit';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function UpdateUser() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [role, setRole] = useState('');
-    const [deleteAvatar, setDeleteAvatar] = useState(false);
+    const [role, setRole] = useState('USER');
     const [avatar, setPhoto] = useState(null);
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const { id } = useParams();
 
-    const getData = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8080/getinfo/${id}`, {
-                withCredentials: true,
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            setUsername(response.data.username);
-            setEmail(response.data.email);
-            setRole(response.data.role);
-        } catch (error) {
-            setError("Не удалось получить данные");
-        }
-    };
-
-    const handleUpdate = async () => {
+    const handleSave = async () => {
         setError('');
-    
+        if(!username || !email || !password) {
+            setError("Пожалуйста, заполните все поля");
+            return;
+        }
         const formData = new FormData();
         formData.append('username', username);
         formData.append('email', email);
         formData.append('role', role);
-        formData.append('deleteAvatar', deleteAvatar.toString());
-        if(password !== ''){
-            formData.append('password', password);
-        }
+        formData.append('password', password);
         if (avatar) {
             formData.append('avatar', avatar);
         }
         try {
-            const response = await axios.put(`http://localhost:8080/update/${id}`, formData, {
+            const response = await axios.post(`http://localhost:8080/adduser`, formData, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -63,18 +44,12 @@ function UpdateUser() {
     };
     
 
-    useEffect(() => {
-        getData();
-    }, []);
-
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
             <div style={{ width: '600px', height: '550px' }}>
                 <MDBContainer className="p-3">
-                    <h2 className="mb-4 text-center">Обновление данных</h2>
+                    <h2 className="mb-4 text-center">Добавление пользователя</h2>
                     {error && <p className="text-danger">{error}</p>}
-                    {error === "" && (
-                        <>
                             <p>Имя пользователя</p>
                             <MDBInput
                                 wrapperClass="mb-3"
@@ -102,19 +77,16 @@ function UpdateUser() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <p className='fst-italic'>*Оставьте поле пустым, если не требуется изменять пароль</p>
                             <p>Роль</p>
                             <select
-                                disabled={id == 1}
                                 className="form-select mb-3"
-                                value={role || ''}
+                                value="USER"
                                 onChange={(e) => setRole(e.target.value)}
                             >
                                 <option value="USER">USER</option>
                                 <option value="MODER">MODER</option>
                                 <option value="ADMIN">ADMIN</option>
                             </select>
-
                             <p>Аватар</p>
                             <MDBInput
                                 wrapperClass="mb-3"
@@ -123,22 +95,13 @@ function UpdateUser() {
                                 id="avatar"
                                 onChange={(e) => setPhoto(e.target.files[0])}
                             />
-                            <MDBCheckbox
-                                wrapperClass="mb-3"
-                                id="deleteavatarcheckbox"
-                                label="Удалить аватар"
-                                checked={deleteAvatar}
-                                onChange={(e) => setDeleteAvatar(e.target.checked)}
-                            />
                             <button
                                 className="mb-4 d-block mx-auto fixed-action-btn btn-primary"
                                 style={{ height: '40px', width: '100%' }}
-                                onClick={handleUpdate}
+                                onClick={handleSave}
                             >
                                 Сохранить
                             </button>
-                        </>
-                    )}
                 </MDBContainer>
             </div>
         </div>

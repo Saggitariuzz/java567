@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 
 function AdminPanel() {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
+    const location = useLocation();
+    const message = location.state?.message;
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -22,6 +25,20 @@ function AdminPanel() {
         };
         fetchUsers();
     }, []);
+
+    useEffect(() => {
+        if (message) {
+            toast.success(message, {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    }, [message]);
 
     const deleteUser = async (id) => {
         try {
@@ -41,6 +58,10 @@ function AdminPanel() {
     return (
         <div className="container mt-5">
             <h2 className="text-center mb-4">Панель администратора</h2>
+            <ToastContainer/>
+            <div className='text-center mb-3'>
+                <Link to={"/add-user"} className="btn btn-primary">Добавить пользователя</Link>
+            </div>
             {error && <p className="text-danger text-center">{error}</p>}
             {!error && users.length > 0 ? (
                 <table className="table table-bordered">
