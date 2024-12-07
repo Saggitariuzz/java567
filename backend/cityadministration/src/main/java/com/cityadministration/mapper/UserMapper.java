@@ -47,6 +47,9 @@ public class UserMapper {
 
     public static String processAvatar(MultipartFile avatar, String username){
         if (avatar != null) {
+            if(avatar.isEmpty()){
+                throw new FileUploadException("Невозможно загрузить пустой файл");
+            }
             try {
                 String Filename = username + "_" + avatar.getOriginalFilename();
                 File file = new File(IMAGE_PATH, Filename);

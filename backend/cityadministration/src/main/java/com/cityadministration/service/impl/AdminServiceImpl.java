@@ -70,7 +70,7 @@ public class AdminServiceImpl implements AdminService {
             String email,
             MultipartFile avatar,
             String role,
-            String deleteavatar
+            boolean deleteavatar
     ){
         if(!isAdmin(session)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("У Вас недостаточно прав");
@@ -91,7 +91,7 @@ public class AdminServiceImpl implements AdminService {
         }
         user.setEmail(email);
         user.setRole(role);
-        if(deleteavatar.equals("true")){
+        if(deleteavatar){
             UserMapper.deleteAvatar(user.getAvatar());
             user.setAvatar(UserMapper.getDefaultImageUrl());
         }

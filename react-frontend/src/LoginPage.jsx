@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { MDBContainer, MDBInput, MDBBtn } from 'mdb-react-ui-kit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CryptoJS from 'crypto-js';
 
 function LoginPage() {
     const [username, setUsername] = useState('');
@@ -20,7 +21,8 @@ function LoginPage() {
                 setError('Пожалуйста, введите логин и пароль.');
                 return;
             }
-            const response = await axios.post('http://localhost:8080/login', { username, password },
+            const hashedPassword = CryptoJS.SHA256(password).toString();
+            const response = await axios.post('http://localhost:8080/login', { username, password: hashedPassword },
                 {withCredentials: true,
                     headers:{
                         "Content-Type": "application/json"

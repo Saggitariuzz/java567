@@ -41,7 +41,7 @@ public class AdminController {
             @RequestParam String email,
             @RequestParam(value="avatar", required=false) MultipartFile avatar,
             @RequestParam String role,
-            @RequestParam String deleteAvatar
+            @RequestParam boolean deleteAvatar
     ){
         return adminService.updateUser(
                 session,

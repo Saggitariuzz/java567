@@ -6,6 +6,7 @@ import {
     MDBCheckbox
 } from 'mdb-react-ui-kit';
 import { useNavigate, useParams } from 'react-router-dom';
+import CryptoJS from 'crypto-js';
 
 function UpdateUser() {
     const [username, setUsername] = useState('');
@@ -41,9 +42,10 @@ function UpdateUser() {
         formData.append('username', username);
         formData.append('email', email);
         formData.append('role', role);
-        formData.append('deleteAvatar', deleteAvatar.toString());
+        formData.append('deleteAvatar', deleteAvatar);
         if(password !== ''){
-            formData.append('password', password);
+            const hashedPassword = CryptoJS.SHA256(password).toString();
+            formData.append('password', hashedPassword);
         }
         if (avatar) {
             formData.append('avatar', avatar);

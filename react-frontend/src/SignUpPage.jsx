@@ -6,6 +6,7 @@ import {
     MDBInput,
     MDBBtn,
 } from 'mdb-react-ui-kit';
+import CryptoJS from 'crypto-js';
 
 function SignupPage() {
     const [username, setUsername] = useState('');
@@ -28,8 +29,9 @@ function SignupPage() {
             }
 
             const formData = new FormData();
+            const hashedPassword = CryptoJS.SHA256(password).toString();
             formData.append('username', username);
-            formData.append('password', password);
+            formData.append('password', hashedPassword);
             formData.append('email', email);
             if(avatar){
                 formData.append('avatar', avatar);

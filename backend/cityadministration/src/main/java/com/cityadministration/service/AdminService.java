@@ -18,7 +18,7 @@ public interface AdminService {
             String email,
             MultipartFile avatar,
             String role,
-            String deleteavatar
+            boolean deleteavatar
     );
 
     ResponseEntity<?> addUser(

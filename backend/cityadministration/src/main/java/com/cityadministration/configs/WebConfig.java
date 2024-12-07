@@ -21,6 +21,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("file:D:/lr5web/java567/backend/cityadministration/src/main/resources/static/images/")
                 .setCachePeriod(0);
+        registry.addResourceHandler("/news_images/**")
+                .addResourceLocations("file:D:/lr5web/java567/backend/cityadministration/src/main/resources/static/news_images/")
+                .setCachePeriod(0);
     }
 }
 
