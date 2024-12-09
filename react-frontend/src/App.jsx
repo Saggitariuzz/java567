@@ -11,7 +11,7 @@ import AuthButtons from './AuthButtons';
 import VisitorCount from './VisitorCount';
 import AdminPanel from './AdminPanel';
 import UpdateUser from './UpdateUser';
-import NewsModerate from  "./NewsModerate"
+// import NewsModerate from  "./NewsModerate"
 function App() {
   const [buttonsStatus, setButtonsStatus] = useState('');
   const [error, setError] = useState('');
@@ -83,7 +83,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard  onLogout={handleLogout}/>} />
             <Route path="/admin-panel" element={<AdminPanel />} />
             <Route path="/update/:id" element={<UpdateUser/>}/>
-            <Route path="/moder-panel" element={<NewModerate/>}/>
+            {/* <Route path="/moder-panel" element={<NewModerate/>}/> */}
           </Routes>
         </div>
       </>

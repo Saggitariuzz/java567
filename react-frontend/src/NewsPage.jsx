@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function NewsPage() {
     const [news, setNews] = useState([]);
     const [error, setError] = useState('');
-    const [role, setRole] = useState('');
+    const [status, setStatus] = useState('');
     const navigate = useNavigate();
     useEffect(() => {
         const fetchNews = async () => {
@@ -24,14 +24,14 @@ function NewsPage() {
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/dashboard', {
+                const response = await axios.get('http://localhost:8080/check-access', {
                     withCredentials: true,
                     headers: {
                         "Content-Type": "application/json"
                     }
                 });
                 console.log(response.data);
-                setRole(response.data.role);
+                setStatus(response.status);
 
             } catch (error) {
                 console.error(error);
@@ -49,7 +49,7 @@ function NewsPage() {
             <h2 className="text-center mb-4">Новости</h2>
             <div className="text-center mb-5">
             {
-                    role === "ADMIN" | role === "MODER"?(
+                    status == 200 ?(
                         <button type="button" className="btn btn-primary" onClick={handleModerPanelClick}>
                             Добавить/редактировать новости.
                         </button>
