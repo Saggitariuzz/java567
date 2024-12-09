@@ -42,6 +42,11 @@ public class NewsController {
         return newsService.deleteNews(session, id);
     }
 
+    @GetMapping("/get-news-data/{id}")
+    public ResponseEntity<?> getNewsData(HttpSession session, @PathVariable Long id){
+        return newsService.getNewsData(session, id);
+    }
+
     @PutMapping("/update-news/{id}")
     public ResponseEntity<?> updateNews(
             HttpSession session,

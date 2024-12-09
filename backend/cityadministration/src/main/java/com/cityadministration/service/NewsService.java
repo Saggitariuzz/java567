@@ -27,6 +27,8 @@ public interface NewsService {
             boolean removeImage
     );
 
+    ResponseEntity<?> getNewsData(HttpSession session, Long id);
+
     ResponseEntity<?> deleteNews(HttpSession session, Long id);
 
 }

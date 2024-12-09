@@ -41,7 +41,7 @@ public class NewsServiceImpl implements NewsService {
     ){
         ResponseEntity<?> checkAccess = allowModerActivity(session);
         if(checkAccess.getStatusCode() != HttpStatus.OK){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("У Вас недостаточно прав");
+            return checkAccess;
         }
         News news = new News();
         news.setHeader(header);
@@ -61,7 +61,7 @@ public class NewsServiceImpl implements NewsService {
     public ResponseEntity<?> deleteNews(HttpSession session, Long id){
         ResponseEntity<?> checkAccess = allowModerActivity(session);
         if(checkAccess.getStatusCode() != HttpStatus.OK){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("У Вас недостаточно прав");
+            return checkAccess;
         }
         Optional<News> optionalNews = newsRepository.findById(id);
         if(optionalNews.isEmpty()){
@@ -71,6 +71,19 @@ public class NewsServiceImpl implements NewsService {
         NewsMapper.deleteImage(news.getImage());
         newsRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> getNewsData(HttpSession session, Long id){
+        ResponseEntity<?> checkAccess = allowModerActivity(session);
+        if(checkAccess.getStatusCode() != HttpStatus.OK){
+            return checkAccess;
+        }
+        Optional<News> optionalNews = newsRepository.findById(id);
+        if(optionalNews.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Новость не найдена");
+        }
+        return ResponseEntity.ok(optionalNews.get());
     }
 
     @Override
@@ -84,7 +97,7 @@ public class NewsServiceImpl implements NewsService {
     ){
         ResponseEntity<?> checkAccess = allowModerActivity(session);
         if(checkAccess.getStatusCode() != HttpStatus.OK){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("У Вас недостаточно прав");
+            return checkAccess;
         }
         Optional<News> optionalNews = newsRepository.findById(id);
         if(optionalNews.isEmpty()){
@@ -94,18 +107,6 @@ public class NewsServiceImpl implements NewsService {
         news.setHeader(header);
         news.setText(text);
         news.setWhenPublished(LocalDateTime.now());
-        String userImage = news.getImage();
-        /*if(removeImage && image != null){
-            NewsMapper.deleteImage(news.getImage());
-            news.setImage(NewsMapper.processImage(image));
-        }
-        else if (removeImage){
-            news.setImage(NewsMapper.deleteImage(userImage));
-        }
-        else if(image != null){
-            NewsMapper.deleteImage(news.getImage());
-            news.setImage(NewsMapper.processImage(image));
-        }*/
         if(removeImage){
             news.setImage(NewsMapper.deleteImage(news.getImage()));
         }
