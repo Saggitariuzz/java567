@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 function VisitorCount() {
-    const [visitorCount, setVisitorCount] = useState(0);  // Начальное значение - 0
+    const [visitorCount, setVisitorCount] = useState(0); 
     const [visitorError, setVisitorError] = useState('');
 
     useEffect(() => {
